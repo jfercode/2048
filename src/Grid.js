@@ -6,7 +6,7 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:50:11 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/01 17:13:50 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:22:37 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,7 +227,7 @@ function updateGridD(grid)
             if (current instanceof Tile && down instanceof Tile && current.value === down.value)
             {
                 let value = current.value + down.value;
-                if (value)
+                if (value === 2048)
                     alert("YOU WIIIIN mamon");
                 down.setValue(value);
                 grid[row][col] = 0;
