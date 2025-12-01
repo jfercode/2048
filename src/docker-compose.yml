@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: nginx
+    build:
+      context: ../
+      dockerfile: src/nginx/Dockerfile
+    volumes:
+      - ./:/usr/share/nginx/html
+    restart: always
+    ports:
+      - "8080:80"
+    
+
+  
