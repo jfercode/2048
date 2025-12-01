@@ -1,1 +1,101 @@
-asddfassfs
+/* selector {
+    propierty : value;
+} */ 
+
+:root 
+{
+    --bg-color: #dfd3dd;
+    --cell-color: #9d939c;
+    --p-color: #7A9B76;
+    --s-color: #8A7E72;
+    --t-color: #5A2328;
+    --f-color: #000;
+    --grid-back: #bbada0;
+
+    --font-dark: #4a4a4a;
+    --font-white: #e4e4e4;
+}
+
+body 
+{
+    background-color: var(--bg-color);
+    font-family: 'Arial' sans-serif;
+    font-size: xx-large;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#score-container
+{
+    font-size: x-large;
+}
+
+.game-container 
+{
+    width: min(90vw, 90vh);
+    height: min(90vw, 90vh);
+    max-width: 600px;
+    max-height: 600px;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+/* Grid container */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    grid-template-rows: repeat(4, 80px);
+    gap: 10px;
+    background: #bbada0;
+    padding: 10px;
+    border-radius: 10px;
+    width: max-content;
+    margin: 0 auto;
+}
+
+/* Each cell (background) */
+.cell {
+    width: 80px;
+    height: 80px;
+    background: #cdc1b4;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* The tile itself */
+.tile {
+    width: 70px;
+    height: 70px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background 0.2s, transform 0.1s;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+.button-wrapper-rst {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+}
+
+#restart-btn {
+    background-color: var(--font-dark);
+    color: var(--font-white);
+}
