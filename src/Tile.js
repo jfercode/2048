@@ -6,7 +6,7 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:50:14 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/02 16:06:51 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/02 17:21:55 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,14 @@ class Tile
 {
     constructor (x, y, value = 2)
     {
-        this.x = x; // column
-        this.y = y; // row
-        this.value = value; // value
-        this.color = this.getColor(); // color
+        this.x = x;
+        this.y = y;
+        this.value = value;
+        this.prevX = x;    
+        this.prevY = y;    
+        this.div = null;   
+        this.isNew = false;
+        this.color = this.getColor();
         this.fontColor = this.getFontColor();
     }
 

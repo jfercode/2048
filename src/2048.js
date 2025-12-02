@@ -6,21 +6,24 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:49:43 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/02 16:05:48 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:06:20 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-let grid;
-
+let grid = [];
 let state;
 
 window.onload = function()
 {
+    state = "WINDOWS_LOAD"
     grid = [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]];
+
+    initializeGrid(grid);
+
     spawnTile(grid, 0, 0, 2);
     spawnTile(grid, 1, 1, 0);
     spawnTile(grid, 2, 2, 4);
@@ -91,7 +94,7 @@ function StartGame()
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],]
-
+    
     addRandomTile(grid);
     addRandomTile(grid);
     drawGrid(grid);

@@ -6,12 +6,29 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:50:11 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/02 16:09:05 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/02 18:02:59 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // Grid element reference
 const gridElement = document.querySelector(".grid-container");
+
+// Draws an empty grid
+function initializeGrid(grid)
+{
+    gridElement.innerHTML = "";
+    
+    for (let row = 0; row < 4; row++)
+    {
+        for (let col = 0; col < 4; col++)
+        {
+            const cellDiv = document.createElement("div");
+            cellDiv.className = "cell";
+            cellDiv.id = `cell-${row}-${col}`;
+            gridElement.appendChild(cellDiv);
+        }
+    }
+}
 
 // Draws an empty grid
 function drawGrid(grid)
@@ -115,6 +132,21 @@ function transpose(grid)
     }
 }
 
+function savePreviousPositions(grid)
+{
+    for (let row of grid)
+    {
+        for (let cell of row)
+        {
+            if (cell instanceof Tile)
+            {
+                cell.prevX = cell.x;
+                cell.prevY = cell.y;
+            }
+        }
+    }
+}
+
  // TODO animate movement // 
 function slide(grid)
 {
@@ -130,8 +162,14 @@ function slide(grid)
                 {
                     grid[row][targetCol] = grid[row][col];
                     grid[row][targetCol].x = targetCol;
+                    grid[row][targetCol].y = row;
                     grid[row][col] = 0;
                     moved = true;
+                }
+                else if (grid[row][col] instanceof Tile)
+                {
+                    grid[row][col].x = col;
+                    grid[row][col].y = row;
                 }
                 targetCol++;
             }
@@ -145,6 +183,7 @@ function slide(grid)
  */
 function slideLeft(grid) 
 {
+    savePreviousPositions(grid);
     let moved1 = slide(grid);
     let merged = updateGridL(grid);
     let moved2 = slide(grid);   
@@ -153,6 +192,7 @@ function slideLeft(grid)
 
 function slideRight(grid) 
 {
+    savePreviousPositions(grid);
     reverseRows(grid);
     let moved = slideLeft(grid);
     reverseRows(grid);
@@ -161,6 +201,7 @@ function slideRight(grid)
 
 function slideUp(grid)
 {
+    savePreviousPositions(grid);
     transpose(grid);
     let moved = slideLeft(grid);
     transpose(grid);
@@ -169,6 +210,7 @@ function slideUp(grid)
 
 function slideDown(grid)
 {
+    savePreviousPositions(grid);
     transpose(grid);
     reverseRows(grid)
     let moved = slideLeft(grid);
@@ -191,7 +233,7 @@ function updateGridL(grid)
             {
                 let value = current.value + next.value;
                 if (value === 2048)
-                    winGame(current.getValue());
+                    winGame();
                 current.setValue(value);
                 current.isNew = true;
                 grid[row][col + 1] = 0;
