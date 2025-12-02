@@ -6,7 +6,7 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:50:11 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/01 17:22:37 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:09:05 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,27 @@ function drawGrid(grid)
             cellDiv.className = "cell";
             if (cell instanceof Tile)
             {
+                // Tile creation (when it is inside a cell) // 
                 const tileDiv = document.createElement("div");
+                
                 tileDiv.className = "tile";
                 tileDiv.textContent = cell.value;
-                tileDiv.style.backgroundColor = cell.color;
+                tileDiv.style.setProperty("background-color", cell.color);
+                tileDiv.style.color = cell.fontColor;
+                
+                cell.div = tileDiv;
                 cellDiv.appendChild(tileDiv);
+
+                // Spawn Cell animation
+                if (cell.isNew === true)
+                {
+                    cell.div.classList.add('tile-spawn');
+                    cell.div.addEventListener('animationend', function handler(){
+                        cell.div.classList.remove('tile-spawn');
+                        cell.div.removeEventListener('animationend', handler);
+                    })
+                    cell.isNew = false;
+                }
             }
             gridElement.appendChild(cellDiv);
         } 
@@ -53,15 +69,19 @@ function getEmptyCells(grid)
     return empty;
 }
 
+function spawnTile(grid, x, y, value, isNew = true) 
+{
+    grid[y][x] = new Tile(x, y, value);
+    grid[y][x].isNew = isNew;
+}
+
 // Add a single tile into my grid
 function addRandomTile(grid) 
 {
     const emptyCells = getEmptyCells(grid);
-    
     if (emptyCells.length == 0) return;
-    
     const { row, col } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-    grid[row][col] = new Tile(col, row, Math.random() < 0.9 ? 2 : 4);
+    spawnTile(grid, col, row, Math.random() < 0.9 ? 2 : 4, true);
 }
 
 // reverse rows
@@ -95,6 +115,7 @@ function transpose(grid)
     }
 }
 
+ // TODO animate movement // 
 function slide(grid)
 {
     let moved = false;
@@ -119,10 +140,15 @@ function slide(grid)
     return moved;
 }
 
-function slideLeft(grid)
+/**
+ * compact -> merge -> compact
+ */
+function slideLeft(grid) 
 {
-    let moved = slide(grid);
-    return moved;
+    let moved1 = slide(grid);
+    let merged = updateGridL(grid);
+    let moved2 = slide(grid);   
+    return moved1 || merged || moved2;
 }
 
 function slideRight(grid) 
@@ -151,88 +177,55 @@ function slideDown(grid)
     return moved;
 }
 
-// TODO UPDATE WIN CONDITION // 
-
 function updateGridL(grid)
 {
-    for (let col = 0; col < 3; col++)
+    let merged = false;
+
+    for (let row = 0; row < 4; row++)
     {
-        for (let row = 0; row < 4; row++)
+        for (let col = 0; col < 3; col++)
         {
             let current = grid[row][col];
             let next = grid[row][col + 1];
             if (current instanceof Tile && next instanceof Tile && current.value === next.value)
             {
                 let value = current.value + next.value;
-                if (value  === 2048)
-                    alert("YOU WIIIIN mamon");
+                if (value === 2048)
+                    winGame(current.getValue());
                 current.setValue(value);
+                current.isNew = true;
                 grid[row][col + 1] = 0;
                 updateScore(current.getValue());
+                merged = true;
+                col++;
             }   
         }
     }
+    return merged;
 }
 
-function updateGridR(grid)
+/*
+    For each Tile i need to check for neightbours (if tile.value === neighbour.value) the game doesnt finnish
+*/
+function validateNoMoreMoves(grid)
 {
     for (let row = 0; row < 4; row++)
     {
-        for (let col = 3; col > 0; col--)
+        for (let col = 0; col < 4; col++)
         {
             let current = grid[row][col];
-            let prev = grid[row][col - 1];
-            if (current instanceof Tile && prev instanceof Tile && current.value === prev.value)
+            if (current instanceof Tile)
             {
-                let value = current.value + prev.value
-                if (value  === 2048)
-                    alert("YOU WIIIIN mamon");
-                current.setValue(value);
-                grid[row][col - 1] = 0;
-                updateScore(current.getValue());
-            }   
+                if (row > 0 && grid[row - 1][col] instanceof Tile && grid[row - 1][col].value === current.value)
+                    return false;
+                if (row < 3 && grid[row + 1][col] instanceof Tile && grid[row + 1][col].value === current.value)
+                    return false;
+                if (col > 0 && grid[row][col - 1] instanceof Tile && grid[row][col - 1].value === current.value)
+                    return false;
+                if (col < 3 && grid[row][col + 1] instanceof Tile && grid[row][col + 1].value === current.value)
+                    return false;
+            }
         }
     }
-}
-
-function updateGridU(grid)
-{
-    for (let col = 0; col < 4; col++)
-    {
-        for (let row = 1; row < 4; row++)
-        {
-            let current = grid[row][col];
-            let top = grid[row - 1][col];
-            if (current instanceof Tile && top instanceof Tile && current.value === top.value)
-            {
-                let value = current.value + top.value;
-                if (value === 2048)
-                    alert("YOU WIIIIN mamon");
-                top.setValue(current.value + top.value);
-                grid[row][col] = 0;
-                updateScore(top.getValue());
-            }   
-        }
-    }
-}
-
-function updateGridD(grid)
-{
-    for (let col = 0; col < 4; col++)
-    {
-        for (let row = 2; row >= 0; row--)
-        {
-            let current = grid[row][col];
-            let down = grid[row + 1][col];
-            if (current instanceof Tile && down instanceof Tile && current.value === down.value)
-            {
-                let value = current.value + down.value;
-                if (value === 2048)
-                    alert("YOU WIIIIN mamon");
-                down.setValue(value);
-                grid[row][col] = 0;
-                updateScore(down.getValue());
-            }   
-        }
-    }
+    return true;
 }

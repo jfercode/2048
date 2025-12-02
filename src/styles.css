@@ -4,21 +4,22 @@
 
 :root 
 {
-    --bg-color: #dfd3dd;
-    --cell-color: #9d939c;
-    --p-color: #7A9B76;
-    --s-color: #8A7E72;
-    --t-color: #5A2328;
-    --f-color: #000;
-    --grid-back: #bbada0;
+    --bg-color: #E3E3E3;
+    --sc-color: #718697;
+    --cell-color: #456882;
+    --p-color: #234C6A;
+    --s-color: #1B3C53;
+    --t-color: #1B3C53;
+    --f-color: #E3E3E3;
+    --grid-back: #234C6A;
 
-    --font-dark: #4a4a4a;
-    --font-white: #e4e4e4;
+    --font-dark: #1B3C53;
+    --font-white: #E3E3E3;
 }
 
 body 
 {
-    background-color: var(--bg-color);
+    background: var(--bg-color);
     font-family: 'Arial' sans-serif;
     font-size: xx-large;
     min-height: 100vh;
@@ -28,9 +29,48 @@ body
     justify-content: center;
 }
 
-#score-container
+.game-container h1 {
+    font-size: 3rem;
+    color: var(--t-color);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5em;
+    text-shadow: 2px 2px 8px var(--cell-color);
+}
+
+.score-container 
 {
-    font-size: x-large;
+    background: var(--sc-color);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(27,60,83,0.08);
+    padding: 20px 40px;
+    margin-bottom: 1.5em;
+    gap: 2rem;
+}
+
+.score-container > span {
+    margin: 0 1rem;
+}
+
+@keyframes scoreBump
+{
+    0% { font-size: 1rem; color: var(--p-color);}
+    75% {font-size: 3rem; color: var(--f-color)}
+    100% {font-size: 2rem; color: var(--font-dark);}
+}
+
+.score-anim 
+{
+    animation: scoreBump 0.3s;
+}
+
+#score
+{
+    font-size: 2rem;
+}
+
+#high-score
+{
+    font-size: 2rem;
 }
 
 .game-container 
@@ -52,7 +92,7 @@ body
     grid-template-columns: repeat(4, 80px);
     grid-template-rows: repeat(4, 80px);
     gap: 10px;
-    background: #bbada0;
+    background: var(--grid-back);
     padding: 10px;
     border-radius: 10px;
     width: max-content;
@@ -63,7 +103,7 @@ body
 .cell {
     width: 80px;
     height: 80px;
-    background: #cdc1b4;
+    background: var(--cell-color);
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -71,8 +111,23 @@ body
     position: relative;
 }
 
+@keyframes tile-spawn
+{
+    from { opacity: 0; transform: scale(0.5);}
+    to  {opacity: 1; transform: scale((1));}
+}
+
+.tile-spawn
+{
+    animation-name: tile-spawn;
+    animation-duration: 0.3s;
+    animation-timing-function: ease;
+}
+
 /* The tile itself */
-.tile {
+.tile 
+{
+    /* Propierties */
     width: 70px;
     height: 70px;
     border-radius: 4px;
@@ -81,21 +136,31 @@ body
     justify-content: center;
     font-size: 2rem;
     font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    transition: background 0.2s, transform 0.1s;
+
     position: absolute;
     top: 5px;
     left: 5px;
+
+    transition: transform 0.2s cubic-bezier(cubic-bezier(0.445, 0.05, 0.55, 0.95));
 }
 
-.button-wrapper-rst {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-
+.button-wrapper-rst button 
+{
+    background: var(--s-color);
+    color: var(--f-color);
+    border: none;
+    border-radius: 8px;
+    padding: 0.7em 2em;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0.5em;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: background 0.2s, transform 0.2s;
+    margin-top: 3rem;
 }
 
-#restart-btn {
-    background-color: var(--font-dark);
-    color: var(--font-white);
+.button-wrapper-rst button:hover {
+    background: var(--cell-color);
+    transform: translateY(-2px) scale(1.05);
 }

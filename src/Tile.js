@@ -6,7 +6,7 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:50:14 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/01 16:40:18 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:06:51 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,34 @@ class Tile
         this.y = y; // row
         this.value = value; // value
         this.color = this.getColor(); // color
+        this.fontColor = this.getFontColor();
     }
-    // TODO change to another (color scheme)
+
     getColor()
     {
         const colors = 
         {
-            2:    "#eee4da",
-            4:    "#ede0c8",
-            8:    "#f2b179",
-            16:   "#f59563",
-            32:   "#f67c5f",
-            64:   "#f65e3b",
-            128:  "#edcf72",
-            256:  "#edcc61",
-            512:  "#edc850",
-            1024: "#edc53f",
-            2048: "#edc22e"
+            2:    "#E3E3E3",
+            4:    "#d0d7df",
+            8:    "#b3c2d1",
+            16:   "#456882",
+            32:   "#234C6A",
+            64:   "#1B3C53",
+            128:  "#234C6A",
+            256:  "#1B3C53",
+            512:  "#234C6A",
+            1024: "#1B3C53",
+            2048: "#234C6A"
         };
-        return colors[this.value] || "#3c3a32";
+        return colors[this.value] || "#1B3C53";
     }
     
+    getFontColor()
+    {
+        if (this.value === 0) return "#E3E3E3";
+        return (this.value >= 16) ? "#E3E3E3" : "#1B3C53";
+    }
+
     getValue()
     {
         return this.value;
@@ -49,5 +56,6 @@ class Tile
     {
         this.value = value;
         this.color = this.getColor();
+        this.fontColor = this.getFontColor()
     }
 }

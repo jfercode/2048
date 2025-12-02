@@ -6,43 +6,27 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:49:43 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/01 17:11:54 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:05:48 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Element references
-let grid = [
-  [1024, 1024, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-  [0, 0, 0, 0],
-];
+let grid;
 
 let state;
 
-// Set the grid to 0 (initial state) and score too
-function StartGame(grid)
+window.onload = function()
 {
-    state = "STARTING";
-    score = 0;
-    
-    for (let i = 0; i < 4; i++)
-    {
-        for (let j = 0; j < 4; j++)
-            grid[i][j] = 0;
-    }
-
-    addRandomTile(grid);
-    addRandomTile(grid);
-    drawGrid(grid);
+    grid = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]];
+    spawnTile(grid, 0, 0, 2);
+    spawnTile(grid, 1, 1, 0);
+    spawnTile(grid, 2, 2, 4);
+    spawnTile(grid, 3, 3, 8);
+    drawGrid(grid)
 }
-
-// Calls start game function
-window.onload = function () 
-{
-    StartGame(grid)
-    state = "PLAYING";
-};
 
 // Event listener with keydown event
 document.addEventListener("keydown", function (event)
@@ -54,37 +38,37 @@ document.addEventListener("keydown", function (event)
         {
             case "ArrowUp":
             {
+                state = "MOVING";
                 moved = slideUp(grid);
-                if (moved)
-                    updateGridU(grid);
+                state ="PLAYING";
                 break;
             }
             case "ArrowDown":
             {
+                state = "MOVING";
                 moved = slideDown(grid);
-                if (moved)
-                    updateGridD(grid);
+                state = "PLAYING";
                 break;
             }
             case "ArrowLeft":
             {
+                state = "MOVING";
                 moved = slideLeft(grid);
-                if (moved)
-                    updateGridL(grid);
+                state = "PLAYING";
                 break;
             }
             case "ArrowRight":
             {
+                state = "MOVING";
                 moved = slideRight(grid);
-                if (moved)
-                    updateGridR(grid);
+                state = "PLAYING";
                 break;
             }
             default:
-                break;
+                return;
         }
-        if (!moved && getEmptyCells(grid).length === 0)
-            return loseGame();
+        if (!moved && getEmptyCells(grid).length === 0 && validateNoMoreMoves(grid) === true)
+            return loseGame(score);
     }
     
     if (state === "PLAYING")
@@ -94,12 +78,37 @@ document.addEventListener("keydown", function (event)
     }
 });
 
+// Set the grid to 0 (initial state) and score too
+function StartGame()
+{
+    console.log("Starting Game");
+    state = "STARTING";
+    score = 0;
+    scoreElement.textContent = 0;
+
+    grid = [
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],
+                [0, 0, 0, 0],]
+
+    addRandomTile(grid);
+    addRandomTile(grid);
+    drawGrid(grid);
+    state = "PLAYING";
+}
+
+// add start functionality to the start btn
+document.getElementById("start-btn").addEventListener("click", function(){
+    StartGame();
+})
+
 //reset grid and score with the start game function
 function resetGame()
 {
     state = "RESTARTING";
     console.log("reset");
-    StartGame(grid)
+    StartGame(grid);
 }
 
 // add reset functionality to the btn
