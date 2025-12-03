@@ -6,7 +6,7 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:51:12 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/02 18:02:50 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:09:59 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 const scoreElement = document.getElementById("score");
 const highScoreElement = document.getElementById("high-score");
 
-// score variable
+// score variables
 let score = 0;
-let highScore = localStorage.getItem("high-score");
+let highScore = 0;
 
-// Update score prototype
+// Update score
 function updateScore(value) 
 {
     score += value
@@ -33,11 +33,11 @@ function updateScore(value)
     })
 }
 
+// Update high score 
 function updateHighScore(value)
 {
     highScore = value;
     highScoreElement.textContent = score;
-    localStorage.setItem("high-score", value);
 
     highScoreElement.classList.add('score-anim');
     highScoreElement.addEventListener('animationend', function handler(){
@@ -46,18 +46,21 @@ function updateHighScore(value)
     })
 }
 
+// Lose game modal 
 function loseGame(currentScore)
 {
     state = "GAME_OVER";
     showGameOverModal("GAME OVER", `Your score: ${currentScore}`, false);   
 }
 
+// Win game modal 
 function winGame()
 {
     state = "WINNING";
     showGameOverModal("YOU WIN!", `You reached 2048!`, true);    
 }
 
+// Show game modals (creation of html div modal element)
 function showGameOverModal(title, message, isWin)
 {
     const modal = document.createElement("div");
@@ -75,6 +78,7 @@ function showGameOverModal(title, message, isWin)
     document.body.appendChild(modal);
 }
 
+// Close the modal and reset states
 function closeModalAndReset()
 {
     const modal = document.getElementById("game-over-modal");

@@ -6,13 +6,15 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:49:43 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/02 18:06:20 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:10:48 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-let grid = [];
-let state;
+// Important variables
+let grid = [];  // Game grid
+let state;      // Current state
 
+// Windows on load (fake presentation page)
 window.onload = function()
 {
     state = "WINDOWS_LOAD"
@@ -84,7 +86,6 @@ document.addEventListener("keydown", function (event)
 // Set the grid to 0 (initial state) and score too
 function StartGame()
 {
-    console.log("Starting Game");
     state = "STARTING";
     score = 0;
     scoreElement.textContent = 0;
@@ -110,7 +111,6 @@ document.getElementById("start-btn").addEventListener("click", function(){
 function resetGame()
 {
     state = "RESTARTING";
-    console.log("reset");
     StartGame(grid);
 }
 

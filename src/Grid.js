@@ -6,7 +6,7 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 14:50:11 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/12/02 18:02:59 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:08:48 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ function initializeGrid(grid)
     }
 }
 
-// Draws an empty grid
+// Draws a grid
 function drawGrid(grid)
 {
     if (gridElement !== undefined && gridElement !== null)
@@ -55,7 +55,7 @@ function drawGrid(grid)
                 cell.div = tileDiv;
                 cellDiv.appendChild(tileDiv);
 
-                // Spawn Cell animation
+                // Spawn Cell animation //
                 if (cell.isNew === true)
                 {
                     cell.div.classList.add('tile-spawn');
@@ -86,6 +86,7 @@ function getEmptyCells(grid)
     return empty;
 }
 
+// Spawn a tile in a x and y postition with a value
 function spawnTile(grid, x, y, value, isNew = true) 
 {
     grid[y][x] = new Tile(x, y, value);
@@ -132,22 +133,7 @@ function transpose(grid)
     }
 }
 
-function savePreviousPositions(grid)
-{
-    for (let row of grid)
-    {
-        for (let cell of row)
-        {
-            if (cell instanceof Tile)
-            {
-                cell.prevX = cell.x;
-                cell.prevY = cell.y;
-            }
-        }
-    }
-}
-
- // TODO animate movement // 
+// Slide tile function 
 function slide(grid)
 {
     let moved = false;
@@ -183,7 +169,6 @@ function slide(grid)
  */
 function slideLeft(grid) 
 {
-    savePreviousPositions(grid);
     let moved1 = slide(grid);
     let merged = updateGridL(grid);
     let moved2 = slide(grid);   
@@ -192,7 +177,6 @@ function slideLeft(grid)
 
 function slideRight(grid) 
 {
-    savePreviousPositions(grid);
     reverseRows(grid);
     let moved = slideLeft(grid);
     reverseRows(grid);
@@ -201,7 +185,6 @@ function slideRight(grid)
 
 function slideUp(grid)
 {
-    savePreviousPositions(grid);
     transpose(grid);
     let moved = slideLeft(grid);
     transpose(grid);
@@ -210,7 +193,6 @@ function slideUp(grid)
 
 function slideDown(grid)
 {
-    savePreviousPositions(grid);
     transpose(grid);
     reverseRows(grid)
     let moved = slideLeft(grid);
@@ -219,6 +201,7 @@ function slideDown(grid)
     return moved;
 }
 
+// Update the grid with traslation and merging tiles 
 function updateGridL(grid)
 {
     let merged = false;
@@ -246,9 +229,8 @@ function updateGridL(grid)
     return merged;
 }
 
-/*
-    For each Tile i need to check for neightbours (if tile.value === neighbour.value) the game doesnt finnish
-*/
+
+// For each Tile i need to check for neightbours (if tile.value === neighbour.value) the game doesnt finnish
 function validateNoMoreMoves(grid)
 {
     for (let row = 0; row < 4; row++)

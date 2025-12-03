@@ -1,228 +1,375 @@
+/* ========== COMENTARIOS GENERALES ========== */
 /* selector {
     propierty : value;
 } */ 
 
+/* ========== VARIABLES GLOBALES (CSS Custom Properties) ========== */
 :root 
 {
-    --bg-color: #E3E3E3;
-    --sc-color: #718697;
-    --cell-color: #456882;
-    --p-color: #234C6A;
-    --s-color: #1B3C53;
-    --t-color: #1B3C53;
-    --f-color: #E3E3E3;
-    --grid-back: #234C6A;
+    /* Colores principales */
+    --bg-color: linear-gradient(180deg, #E3E3E3 0%, #456882 100%);           /* Color de fondo principal */
+    --sc-color: #718697;           /* Color del contenedor de score */
+    --cell-color: #456882;         /* Color de las celdas del grid */
+    --p-color: #234C6A;            /* Color primario (no utilizado actualmente) */
+    --s-color: #1B3C53;            /* Color secundario para botones */
+    --t-color: #1B3C53;            /* Color del título */
+    --f-color: #E3E3E3;            /* Color del texto en elementos oscuros */
+    --grid-back: #234C6A;          /* Color de fondo del grid */
 
-    --font-dark: #1B3C53;
-    --font-white: #E3E3E3;
+    /* Colores de texto */
+    --font-dark: #1B3C53;          /* Texto oscuro */
+    --font-white: #E3E3E3;         /* Texto claro */
+    
+    /* Variables responsive (se modifican en media queries) */
+    --cell-size: 80px;             /* Tamaño de cada celda del grid */
+    --gap-size: 10px;              /* Espacio entre celdas */
+    --title-size: 5rem;            /* Tamaño del título h1 */
+}
+
+/* ========== RESET UNIVERSAL ========== */
+* {
+    margin: 0;                     /* Elimina márgenes por defecto */
+    padding: 0;                    /* Elimina padding por defecto */
+    box-sizing: border-box;        /* Incluye padding y border en el cálculo del tamaño */
+}
+
+/* ========== CONFIGURACIÓN HTML Y BODY ========== */
+html, body {
+    height: 100%;                  /* Ocupa el 100% de la altura del viewport */
+    width: 100%;                   /* Ocupa el 100% del ancho del viewport */
 }
 
 body 
 {
-    background: var(--bg-color);
-    font-family: 'Arial' sans-serif;
-    font-size: xx-large;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
+    background: var(--bg-color);        /* Aplica color de fondo desde variable */
+    font-family: 'Arial', sans-serif;   /* Tipografía principal */
+    font-size: 16px;                    /* Tamaño base de fuente */
+    display: flex;                      /* Activa flexbox */
+    align-items: center;                /* Centra verticalmente */
+    justify-content: center;            /* Centra horizontalmente */
+    min-height: 100vh;                  /* Mínimo de 100% de altura visible */
+    padding: 10px;                      /* Espaciado interno */}
+
+/* ========== TÍTULO DEL JUEGO ========== */
+.game-container h1 
+{
+    font-size: var(--title-size);                       /* Usa variable responsive */
+    color: var(--t-color);                              /* Color del título */
+    letter-spacing: 0.1em;                              /* Espaciado entre letras */
+    margin-bottom: 0.5em;                               /* Margen inferior relativo */
+    text-shadow: 2px 2px 8px var(--cell-color);         /* Sombra de texto */
+    text-align: center;                                 /* Centra el texto */
 }
 
-.game-container h1 {
-    font-size: 3rem;
-    color: var(--t-color);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.5em;
-    text-shadow: 2px 2px 8px var(--cell-color);
-}
-
+/* ========== CONTENEDOR DE PUNTUACIÓN ========== */
 .score-container 
 {
-    background: var(--sc-color);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(27,60,83,0.08);
-    padding: 20px 40px;
-    margin-bottom: 1.5em;
-    gap: 2rem;
-    border: 6px solid #1B3C53;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.5rem;
+    background: var(--sc-color);                                /* Color de fondo desde variable */
+    border-radius: 12px;                                        /* Esquinas redondeadas */
+    box-shadow: 0 2px 8px rgba(27,60,83,0.08);                /* Sombra sutil */
+    padding: clamp(15px, 5vw, 30px) clamp(25px, 8vw, 60px);     /* Padding responsive */
+    margin-bottom: 1.5em;                                       /* Margen inferior */
+    gap: clamp(1rem, 4vw, 2rem);                                /* Espaciado entre elementos flex (responsive) */
+    border: clamp(3px, 1vw, 6px) solid #1B3C53;               /* Borde responsive */
+    display: flex;                                              /* Activa flexbox para distribuir items */
+    justify-content: space-around;                              /* Distribuye items equitativamente */
+    align-items: center;                                        /* Centra verticalmente */
+    font-size: 1.5rem;                                          /* Tamaño de fuente responsive */
+    flex-wrap: wrap;                                            /* Permite que items se corten en líneas nuevas */
+    max-width: 480px;                                           /* Ancho maximo */
+
 }
 
+/* ========== SPANS DENTRO DEL SCORE CONTAINER ========== */
 .score-container > span {
-    margin: 0 1rem;
+    margin: 3rem;                           /* Margen horizontal responsive */
+    white-space: nowrap;                        /* Evita que el texto se divida en líneas */
+    width: 100%;
 }
 
+/* ========== ANIMACIÓN DEL BUMP DE PUNTUACIÓN ========== */
 @keyframes scoreBump
 {
-    0% { font-size: 1rem; color: inherit;}
-    75% {font-size: 2rem; color: var(--f-color)}
-    100% {font-size: 1.5rem; color: var(--font-dark);}
+    0% { 
+        transform: scale(1); color: inherit;       /* Tamaño normal al inicio */
+    }
+    75% { 
+        transform: scale(1.3);     /* Amplía el elemento al 130% */
+        color: var(--f-color);     /* Cambia color a destello */
+    }
+    100% { 
+        transform: scale(1);       /* Vuelve al tamaño normal */
+        color: var(--font-dark);   /* Vuelve al color original */
+    }
 }
 
+/* ========== CLASE PARA APLICAR ANIMACIÓN DE BUMP ========== */
 .score-anim 
 {
-    animation: scoreBump 0.3s;
+    animation: scoreBump 0.3s ease-out;   /* Aplica animación en 0.3 segundos */
 }
 
-#score
+/* ========== ELEMENTOS DE SCORE (número) ========== */
+#score, #high-score
 {
-    font-size: 1.5rem;
+    font-size: inherit;            /* Hereda tamaño de su padre */
+    font-weight: bold;             /* Texto más grueso */
 }
 
-#high-score
-{
-    font-size: 1.5rem;
-}
-
+/* ========== CONTENEDOR PRINCIPAL DEL JUEGO ========== */
 .game-container 
 {
-    width: min(90vw, 90vh);
-    height: min(90vw, 90vh);
-    max-width: 600px;
-    max-height: 600px;
-    padding: 20px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-sizing: border-box;
+    width: min(90vw, 90vh);             /* Usa el menor entre 90% ancho o alto */
+    height: auto;                       /* Alto automático según contenido */
+    max-width: 600px;                   /* Límite máximo de ancho */
+    padding: clamp(15px, 5vw, 20px);    /* Padding interno responsive */
+    border-radius: 10px;                /* Esquinas redondeadas */
+    display: flex;                      /* Activa flexbox */
+    flex-direction: column;             /* Ordena elementos verticalmente */
+    align-items: center;                /* Centra horizontalmente */
+    justify-content: center;            /* Centra verticalmente */
 }
-/* Grid container */
+
+/* ========== GRID DEL JUEGO (4x4) ========== */
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 80px);
-    grid-template-rows: repeat(4, 80px);
-    gap: 10px;
-    background: var(--grid-back);
-    padding: 10px;
-    border-radius: 10px;
-    width: max-content;
-    margin: 0 auto;
+    display: grid;                                          /* Activa CSS Grid */
+    grid-template-columns: repeat(4, var(--cell-size));     /* 4 columnas del mismo tamaño */
+    grid-template-rows: repeat(4, var(--cell-size));        /* 4 filas del mismo tamaño */
+    gap: var(--gap-size);                                   /* Espacio entre celdas */
+    background: var(--grid-back);                           /* Color de fondo del grid */
+    padding: var(--gap-size);                               /* Padding interno */
+    border-radius: 10px;                                    /* Esquinas redondeadas */
+    width: max-content;                                     /* Ancho ajustado al contenido */
+    margin: 0 auto;                                         /* Centra el grid horizontalmente */
 }
 
-/* Each cell (background) */
+/* ========== CELDA INDIVIDUAL DEL GRID ========== */
 .cell {
-    width: 80px;
-    height: 80px;
-    background: var(--cell-color);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    width: var(--cell-size);       /* Ancho desde variable */
+    height: var(--cell-size);      /* Alto desde variable */
+    background: var(--cell-color); /* Color de fondo */
+    border-radius: 6px;            /* Esquinas ligeramente redondeadas */
+    display: flex;                 /* Activa flexbox */
+    align-items: center;           /* Centra verticalmente */
+    justify-content: center;       /* Centra horizontalmente */
+    position: relative;            /* Necesario para posicionar tiles absolutamente */
 }
 
+/* ========== ANIMACIÓN DE APARICIÓN DEL TILE ========== */
 @keyframes tile-spawn
 {
-    from { opacity: 0; transform: scale(0.5);}
-    to  {opacity: 1; transform: scale((1));}
-}
-
-.tile-spawn
-{
-    animation-name: tile-spawn;
-    animation-duration: 0.3s;
-    animation-timing-function: ease;
-}
-
-/* The tile itself */
-.tile 
-{
-    /* Propierties */
-    width: 70px;
-    height: 70px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    font-weight: bold;
-
-    position: absolute;
-    top: 5px;
-    left: 5px;
-}
-
-.button-wrapper-rst button 
-{
-    background: var(--s-color);
-    color: var(--f-color);
-    border: none;
-    border-radius: 8px;
-    padding: 0.7em 2em;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 0 0.5em;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    transition: background 0.2s, transform 0.2s;
-    margin-top: 3rem;
-}
-
-.button-wrapper-rst button:hover {
-    background: var(--cell-color);
-    transform: translateY(-2px) scale(1.05);
-}
-
-/*WIN AND LOSE MODAL*/
-.game-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(27, 60, 83, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background: var(--bg-color);
-    border-radius: 12px;
-    padding: 40px;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(27, 60, 83, 0.3);
-    animation: modalSlideIn 0.4s ease;
-}
-
-.modal-content.win {
-    border: 8px solid var(--grid-back);
-}
-
-.modal-content.lose {
-    border: 8px solid var(--grid-back);
-}
-
-.modal-content button {
-    background: var(--s-color);
-    color: var(--f-color);
-    border: none;
-    border-radius: 8px;
-    padding: 0.8em 2.5em;
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-top: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.modal-content button:hover {
-    background: var(--cell-color);
-    transform: scale(1.05);
-}
-
-@keyframes modalSlideIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
+    from { 
+        opacity: 0;                /* Comienza invisible */
+        transform: scale(0.5);     /* Comienza al 50% del tamaño */
     }
     to {
-        opacity: 1;
-        transform: scale(1);
+        opacity: 1;                /* Termina visible */
+        transform: scale(1);       /* Termina al tamaño completo */
     }
 }
+
+/* ========== CLASE PARA APLICAR ANIMACIÓN DE SPAWN ========== */
+.tile-spawn
+{
+    animation: tile-spawn 0.3s ease; /* Animación en 0.3 segundos con easing suave */
+}
+
+/* ========== EL TILE (número en la celda) ========== */
+.tile 
+{
+    width: calc(var(--cell-size) - 10px);           /* Ancho = tamaño celda - 10px */
+    height: calc(var(--cell-size) - 10px);          /* Alto = tamaño celda - 10px */
+    border-radius: 4px;                             /* Esquinas muy redondeadas */
+    display: flex;                                  /* Activa flexbox */
+    align-items: center;                            /* Centra verticalmente */
+    justify-content: center;                        /* Centra horizontalmente */
+    font-size: clamp(1rem, 4vw, 2rem);              /* Tamaño de fuente responsive */
+    font-weight: bold;                              /* Texto más grueso */
+    position: absolute;                             /* Posicionamiento absoluto dentro de celda */
+    top: 5px;                                       /* Distancia del borde superior */
+    left: 5px;                                      /* Distancia del borde izquierdo */
+}
+
+/* ========== BOTÓN DE RESETEO ========== */
+.button-wrapper-rst button 
+{
+    background: var(--s-color);                                 /* Color de fondo desde variable */
+    color: var(--f-color);                                      /* Color de texto */
+    border: none;                                               /* Sin borde */
+    border-radius: 8px;                                         /* Esquinas redondeadas */
+    padding: clamp(0.5em, 2vw, 0.7em) clamp(1em, 4vw, 2em);     /* Padding responsive */
+    font-size: clamp(0.9rem, 2.5vw, 1.2rem);                    /* Tamaño de fuente responsive */
+    font-weight: bold;                                          /* Texto más grueso */
+    margin: 0 0.5em;                                            /* Margen horizontal */
+    cursor: pointer;                                            /* Cambia cursor a pointer */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);                   /* Sombra sutil */
+    transition: background 0.2s, transform 0.2s;                /* Transiciones suaves */
+    margin-top: clamp(1.5rem, 5vw, 3rem);                       /* Margen superior responsive */
+}
+
+/* ========== ESTADO HOVER DEL BOTÓN ========== */
+.button-wrapper-rst button:hover {
+    background: var(--cell-color);                  /* Cambia color al pasar el mouse */
+    transform: translateY(-2px) scale(1.05);        /* Eleva el botón y lo amplía */
+}
+
+/* ========== ESTADO ACTIVO DEL BOTÓN ========== */
+.button-wrapper-rst button:active {
+    transform: translateY(0) scale(0.98);           /* Oprime el botón visualmente */
+}
+
+/* ========== MODAL DE VICTORIA/DERROTA ========== */
+.game-modal {
+    position: fixed;                                /* Fijo en relación a la ventana */
+    top: 0;                                         /* Pegado al borde superior */
+    left: 0;                                        /* Pegado al borde izquierdo */
+    width: 100%;                                    /* Ocupa todo el ancho */
+    height: 100%;                                   /* Ocupa toda la altura */
+    background: rgba(27, 60, 83, 0.8);            /* Fondo semi-transparente oscuro */
+    display: flex;                                  /* Activa flexbox */
+    align-items: center;                            /* Centra verticalmente */
+    justify-content: center;                        /* Centra horizontalmente */
+    z-index: 1000;                                  /* Aparece por encima de todo */
+    padding: 20px;                                  /* Padding interno */
+}
+
+/* ========== CONTENIDO DEL MODAL ========== */
+.modal-content {
+    background: var(--bg-color);                            /* Color de fondo */
+    border-radius: 12px;                                    /* Esquinas redondeadas */
+    padding: clamp(20px, 5vw, 40px);                        /* Padding responsive */
+    text-align: center;                                     /* Centra el texto */
+    box-shadow: 0 8px 32px rgba(27, 60, 83, 0.3);         /* Sombra prominente */
+    animation: modalSlideIn 0.4s ease;                      /* Aplica animación de entrada */
+    max-width: 90vw;                                        /* Máximo ancho responsive */
+    max-height: 90vh;                                       /* Máximo alto responsive */
+    overflow-y: auto;                                       /* Scroll vertical si es necesario */
+    border: clamp(4px, 2vw, 8px) solid var(--grid-back);    /* Borde responsive */
+}
+
+/* ========== TÍTULO DEL MODAL ========== */
+.modal-content h2 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);          /* Tamaño responsive */
+    margin-bottom: 1rem;                            /* Margen inferior */
+    color: var(--t-color);                          /* Color del título */
+}
+
+/* ========== PÁRRAFOS DEL MODAL ========== */
+.modal-content p {
+    font-size: clamp(1rem, 3vw, 1.3rem);            /* Tamaño responsive */
+    margin-bottom: 1rem;                            /* Margen inferior */
+    color: var(--font-dark);                        /* Color de texto oscuro */
+}
+
+/* ========== BOTÓN DEL MODAL ========== */
+.modal-content button {
+    background: var(--s-color);                                         /* Color de fondo */
+    color: var(--f-color);                                              /* Color de texto */
+    border: none;                                                       /* Sin borde */
+    border-radius: 8px;                                                 /* Esquinas redondeadas */
+    padding: clamp(0.6em, 2vw, 0.8em) clamp(1.5em, 5vw, 2.5em);         /* Padding responsive */
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);                            /* Tamaño responsive */
+    font-weight: bold;                                                  /* Texto más grueso */
+    margin-top: 1.5rem;                                                 /* Margen superior */
+    cursor: pointer;                                                    /* Cambia cursor */
+    transition: all 0.3s;                                               /* Transición suave para todas las propiedades */
+}
+
+/* ========== HOVER DEL BOTÓN DEL MODAL ========== */
+.modal-content button:hover {
+    background: var(--cell-color);          /* Cambia color */
+    transform: scale(1.05);                 /* Amplía el botón */
+}
+
+/* ========== ACTIVO DEL BOTÓN DEL MODAL ========== */
+.modal-content button:active {
+    transform: scale(0.98);        /* Oprime el botón */
+}
+
+/* ========== ANIMACIÓN DE ENTRADA DEL MODAL ========== */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;                /* Comienza invisible */
+        transform: scale(0.8);     /* Comienza más pequeño */
+    }
+    to {
+        opacity: 1;                /* Termina visible */
+        transform: scale(1);       /* Termina al tamaño completo */
+    }
+}
+
+/* ========== MEDIA QUERIES - ESTILOS RESPONSIVOS ========== */
+
+/* ========== TABLET (768px y menos) ========== */
+@media (max-width: 768px) {
+    /* Reduce tamaños de variables para pantallas medianas */
+    :root {
+        --gap-size: 8px;           /* Espacios más pequeños */
+    }
+
+    /* Botones ocupan el ancho completo */
+    .button-wrapper-rst button {
+        width: 100%;                            /* Ancho completo */
+    }
+}
+
+/* ========== MÓVIL ESTÁNDAR (480px y menos) ========== */
+@media (max-width: 480px) {
+    /* Reduce más aún los tamaños para teléfonos */
+    :root {
+        --gap-size: 6px;           /* Espacios mínimos */
+    }
+
+    /* Reduce tamaño base de fuente para móvil */
+    body {
+        font-size: 14px;           /* Fuente más pequeña */
+    }
+
+    /* Ajusta el contenedor principal */
+    .game-container {
+        width: 100%;               /* Ancho completo */
+        padding: 10px;             /* Padding mínimo */
+    }
+
+    /* Reduce margen del título */
+    .game-container h1 {
+        margin-bottom: 0.3em;      /* Margen muy pequeño */
+    }
+
+    /* Ajusta tamaño del tile */
+    .tile {
+        font-size: clamp(0.8rem, 3vw, 1.5rem); /* Fuente más pequeña */
+    }
+
+    /* Ajusta botón */
+    .button-wrapper-rst button {
+        padding: 0.6em 1.2em;      /* Padding más pequeño */
+        margin-top: 1.5rem;        /* Margen superior reducido */
+    }
+
+    /* Ajusta modal */
+    .modal-content {
+        padding: 20px;             /* Padding compacto */
+        border-radius: 8px;        /* Esquinas menos redondeadas */
+    }
+}
+
+/* ========== MÓVIL PEQUEÑO (320px y menos) ========== */
+@media (max-width: 320px) {
+    /* Tamaños mínimos para dispositivos muy pequeños */
+    :root {
+        --gap-size: 4px;           /* Espacios mínimos */
+    }
+
+    /* Título muy pequeño */
+    .game-container h1 {
+        font-size: 1.2rem;         /* Fuente muy pequeña */
+    }
+
+    /* Fuente muy pequeña en tiles */
+    .tile {
+        font-size: 0.8rem;         /* Números más pequeños */
+    }
+}
+
+
