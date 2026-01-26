@@ -7,23 +7,24 @@
 :root 
 {
     /* Colores principales */
-    --bg-color: linear-gradient(180deg, #E3E3E3 0%, #456882 100%);           /* Color de fondo principal */
-    --sc-color: #718697;           /* Color del contenedor de score */
-    --cell-color: #456882;         /* Color de las celdas del grid */
-    --p-color: #234C6A;            /* Color primario (no utilizado actualmente) */
-    --s-color: #1B3C53;            /* Color secundario para botones */
-    --t-color: #1B3C53;            /* Color del título */
-    --f-color: #E3E3E3;            /* Color del texto en elementos oscuros */
-    --grid-back: #234C6A;          /* Color de fondo del grid */
+    --bg-color: rgb(19, 21, 21);           /* Color de fondo principal */
+    --sc-color: rgba(27, 206, 185, 0.8);           /* Color del contenedor de score */
+    --cell-color: #1bceb9cc;         /* Color de las celdas del grid */
+    --p-color: rgba(27, 206, 185, 0.8);            /* Color primario (no utilizado actualmente) */
+    --s-color: rgba(20, 109, 99, 0.8);            /* Color secundario para botones */
+    --t-color: rgba(20, 109, 99, 0.8);            /* Color del título */
+    --f-color: rgba(255, 255, 255, 255);            /* Color del texto en elementos oscuros */
+    --grid-back: #146d63cc;          /* Color de fondo del grid */
 
     /* Colores de texto */
-    --font-dark: #1B3C53;          /* Texto oscuro */
-    --font-white: #E3E3E3;         /* Texto claro */
+    --font-dark: rgba(20, 109, 99, 0.8);         /* Texto oscuro */
+    --font-white: rgba(86, 255, 235, 0.8);         /* Texto claro */
     
     /* Variables responsive (se modifican en media queries) */
     --cell-size: 80px;             /* Tamaño de cada celda del grid */
     --gap-size: 10px;              /* Espacio entre celdas */
     --title-size: 5rem;            /* Tamaño del título h1 */
+    --border-color: rgba(20, 109, 99, 0.8);    /* Color del borde */
 }
 
 /* ========== RESET UNIVERSAL ========== */
@@ -41,20 +42,36 @@ html, body {
 
 body 
 {
-    background: var(--bg-color);        /* Aplica color de fondo desde variable */
+    background-color: var(--bg-color);        /* Aplica color de fondo desde variable */
+    background-image: url("/public/bg-test.png");
+    background-size: 5px 5px;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-position: center;
     font-family: 'Arial', sans-serif;   /* Tipografía principal */
     font-size: 16px;                    /* Tamaño base de fuente */
     display: flex;                      /* Activa flexbox */
     align-items: center;                /* Centra verticalmente */
     justify-content: center;            /* Centra horizontalmente */
     min-height: 100vh;                  /* Mínimo de 100% de altura visible */
-    padding: 10px;                      /* Espaciado interno */}
+    padding: 10px;                      /* Espaciado interno */
+}
+
+/* ========== PATRÓN DE FONDO ========== */
+.bg-pattern {
+    background-color: var(--bg-color);
+    background-image: url("/public/bg-test.png");
+    background-size: 5px 5px;
+    background-repeat: repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
 
 /* ========== TÍTULO DEL JUEGO ========== */
 .game-container h1 
 {
     font-size: var(--title-size);                       /* Usa variable responsive */
-    color: var(--t-color);                              /* Color del título */
+    color: var(--p-color);                              /* Color del título */
     letter-spacing: 0.1em;                              /* Espaciado entre letras */
     margin-bottom: 0.5em;                               /* Margen inferior relativo */
     text-shadow: 2px 2px 8px var(--cell-color);         /* Sombra de texto */
@@ -70,7 +87,7 @@ body
     padding: clamp(15px, 5vw, 30px) clamp(25px, 8vw, 60px);     /* Padding responsive */
     margin-bottom: 1.5em;                                       /* Margen inferior */
     gap: clamp(1rem, 4vw, 2rem);                                /* Espaciado entre elementos flex (responsive) */
-    border: clamp(3px, 1vw, 6px) solid #1B3C53;               /* Borde responsive */
+    border: clamp(3px, 1vw, 6px) solid var(--border-color);               /* Borde responsive */
     display: flex;                                              /* Activa flexbox para distribuir items */
     justify-content: space-around;                              /* Distribuye items equitativamente */
     align-items: center;                                        /* Centra verticalmente */
